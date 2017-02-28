@@ -1,0 +1,79 @@
+*, html, body {
+    margin: 0px;
+    padding: 0px;
+    background: #F4F7F9;
+
+}
+
+.main {
+    margin: 50px;
+}
+
+.maincolor {
+    color: #1DA1F3;
+}
+
+.color1 {
+    color: #14171A;
+}
+
+.color2 {
+    color: #657786;
+}
+
+.heading1 {
+    margin: 20px 0px;
+}
+
+#twitter_logo {
+    border-radius: 5px;
+    float: left;
+    margin-right: 20px;
+}
+
+.center_div {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.twitter_box {
+    margin: 50px 0px;
+    border-radius: 25px;
+    border: 2px solid #D7D8E9;
+    padding: 20px;
+    width: 100%;
+}
+
+.twitter_title {
+    margin: 0px;
+}
+
+
+.twitter_body{
+    margin: 50px 0px;
+}
+
+.twitter_footer {
+    margin: 0px;
+    height: 20px;
+}
+
+.icons {
+    height: 30px;
+    width: 30px;
+}
+
+button {
+  display: flex-inline;
+  align-items: center;
+  margin: 0px;
+  padding: 0px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
+  fill: currentColor;
+}
