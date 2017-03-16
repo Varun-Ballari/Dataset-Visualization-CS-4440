@@ -7,9 +7,9 @@
 
     	<!-- Bootstrap CSS -->
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+		<!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script> -->
 
 		<script src="{{ url_for('static',filename='js/twitterbuttons.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
@@ -62,35 +62,51 @@
 					</div>
 				</div>
 			</div>
+
+			<h3>Google Maps</h3>
+	    	<div id="map"></div>
 		</div>
-    </body>
-	 <head>
-    <style>
-      #map {
-        height: 400px;
-        width: 100%;
-     
-       }
-    </style>
-  </head>
-    <body>
-    	<h3>Google Maps</h3>
-    		<div id="map"></div>
-			    <script>
-			      function initMap() {
-			        var uluru = {lat: 37.09024, lng: -95.712891};
-			        var map = new google.maps.Map(document.getElementById('map'), {
-			          zoom: 4,
-			          center: uluru
-			        });
-			        var marker = new google.maps.Marker({
-			          position: uluru,
-			          map: map
-			        });
-			      }
-			    </script>
-			    <script async defer
-			    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoru0Q1VqMdIaXGmCS5Ic3EwC765BmqZs&callback=initMap">
-		</script>
-  </body>
+		<script>
+			function initMap() {
+		        var myLatLng = {lat: 37.363, lng: -95.044};
+				// if (navigator.geolocation) {
+		        //   navigator.geolocation.getCurrentPosition(function(position) {
+		        //     var pos = {
+		        //       lat: position.coords.latitude,
+		        //       lng: position.coords.longitude
+		        //     };
+				//
+		        //     infoWindow.setPosition(pos);
+		        //     infoWindow.setContent('Location found.');
+		        //     map.setCenter(pos);
+		        //   }, function() {
+		        //     handleLocationError(true, infoWindow, map.getCenter());
+		        //   });
+		        // } else {
+		        //   // Browser doesn't support Geolocation
+		        //   handleLocationError(false, infoWindow, map.getCenter());
+		        // }
+		        // Create a map object and specify the DOM element for display.
+		        var map = new google.maps.Map(document.getElementById('map'), {
+		          center: myLatLng,
+		          scrollwheel: false,
+		          zoom: 4
+		        });
+
+		        // Create a marker and set its position.
+		        var marker = new google.maps.Marker({
+		          map: map,
+		          position: myLatLng,
+		          title: 'Hello World!'
+		        });
+
+
+			  // Try HTML5 geolocation.
+
+		      }
+
+	    </script>
+	    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCxAq9ZEcDIW_mXx5gepvXKPNuTqNueo1o&callback=initMap"
+	    async defer></script>
+	 </body>
 </html>

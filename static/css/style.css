@@ -1,8 +1,12 @@
 *, html, body {
     margin: 0px;
     padding: 0px;
-    background: #F4F7F9;
+    /*background: #F4F7F9;*/
 
+}
+
+body {
+    background: #F4F7F9;
 }
 
 .main {
@@ -77,3 +81,9 @@ button {
   margin-right: 15px;
   fill: currentColor;
 }
+
+#map {
+  height: 400px;
+  width: 100%;
+  margin: 20px;
+ }
