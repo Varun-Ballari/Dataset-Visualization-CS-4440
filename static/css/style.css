@@ -1,33 +1,59 @@
 *, html, body {
     margin: 0px;
     padding: 0px;
-    /*background: #F4F7F9;*/
-
 }
 
 body {
     background: #F4F7F9;
 }
 
-.main {
-    margin: 50px;
+.zero {
+    margin: 0px;
+    padding: 0px;
 }
 
-.maincolor {
+.topMargin {
+    margin: 20px 0px;
+}
+
+.clear {
+    background-color: rgba(0,0,0,0);
+}
+
+.mainTitle {
     color: #1DA1F3;
+    height:50px;
+    width:100%;
+    background-color:#456;
+    text-align:center;
+    padding-top:12px;
 }
 
-.color1 {
-    color: #14171A;
+.mainBody {
+    height:calc(100vh - 50px);
+    width:100%;
+}
+
+.indent {
+    margin: 20px;
 }
 
 .color2 {
-    color: #657786;
+    color: #AAAAAA;
 }
 
-.heading1 {
-    margin: 20px 0px;
+.panel {
+    overflow: scroll;
 }
+
+
+.twitter_box {
+    border-radius: 5px;
+    /*border: 2px solid #D7D8E9;*/
+    padding: 20px;
+    background-color: #456;
+}
+
 
 #twitter_logo {
     border-radius: 5px;
@@ -35,28 +61,16 @@ body {
     margin-right: 20px;
 }
 
-.center_div {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.twitter_box {
-    margin: 50px 0px;
-    border-radius: 25px;
-    border: 2px solid #D7D8E9;
-    padding: 20px;
-    width: 100%;
-}
 
 .twitter_title {
     margin: 0px;
+    margin-top: 7px;
+    font-size: 20px;
+    color: #FFFFFF;
+
 }
 
 
-.twitter_body{
-    margin: 50px 0px;
-}
 
 .twitter_footer {
     margin: 0px;
@@ -69,21 +83,43 @@ body {
 }
 
 button {
-  display: flex-inline;
-  align-items: center;
-  margin: 0px;
-  padding: 0px;
+    display: flex-inline;
+    align-items: center;
+    margin: 0px;
+    padding: 0px;
 }
 
 .icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 15px;
-  fill: currentColor;
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    fill: currentColor;
 }
 
 #map {
-  height: 400px;
-  width: 100%;
-  margin: 20px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+ }
+
+
+ #loader {
+     margin: 30px auto;
+     width: 140px;
+     height: 140px;
+     border: 16px solid #f3f3f3;
+     border-radius: 50%;
+     border-top: 16px solid #F0AD4E;
+     -webkit-animation: spin 1.5s linear infinite;
+     animation: spin 1.5s linear infinite;
+ }
+
+ @-webkit-keyframes spin {
+     0% { -webkit-transform: rotate(0deg); }
+     100% { -webkit-transform: rotate(360deg); }
+ }
+
+ @keyframes spin {
+     0% { transform: rotate(0deg); }
+     100% { transform: rotate(360deg); }
  }

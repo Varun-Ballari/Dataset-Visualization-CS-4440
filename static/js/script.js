@@ -1,11 +1,28 @@
 function initMap() {
     var myLatLng = {lat: 37.363, lng: -95.044};
     var map, infoWindow;
+
+    var styledMapType = new google.maps.StyledMapType(
+
+    [
+
+    ],
+    {name: 'Styled Map'});
+
+
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: myLatLng,
-        zoom: 3
+        zoom: 3,
+        mapTypeControlOptions: {
+          mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                  'styled_map']
+        }
     });
     infoWindow = new google.maps.InfoWindow;
+
+    map.mapTypes.set('styled_map', styledMapType);
+    map.setMapTypeId('styled_map');
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -53,24 +70,105 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
 }
 
-function getTweetsFromButton() {
+function search() {
     lat = document.getElementById("lat").value;
-    long = document.getElementById("long").value;
+    lon = document.getElementById("long").value;
     rad = document.getElementById("radius").value;
 
-    console.log(lat, long, rad)
+    if (lat == "" || long == "" || rad == "") {
+        console.log("error")
+        jQuery.noConflict();
+        $('#error').modal('toggle');
+    } else {
+        console.log(lat, lon, rad)
 
-    getTweets(lat, long, rad);
+        getTweets(parseInt(lat), parseInt(lon), parseInt(rad), 5);
+    }
+
 }
 
-function getTweets(lat, long, radius) {
-    console.log(lat, long);
+function load() {
+    jQuery.noConflict();
+    $('#loading').modal({backdrop: 'static', keyboard: false})
+    var sec = 0;
 
+    var counterId = setInterval(function() {
+        sec++;
+        document.getElementById("count-up").innerText = sec;
+    }, 1000);
+
+    $.get("/loadDB", function(data) {
+        console.log(data);
+        if (data.success) {
+            $('#loading').modal('hide');
+        }
+    });
+}
+
+function reset() {
+    jQuery.noConflict();
+    $('#clear').modal({backdrop: 'static', keyboard: false})
+}
+
+function deleteDB() {
+    console.log("deleting")
+    $('#deleteLoader').show()
+    $("#deletebutton").attr("disabled",true);
+    $("#deleteClose").attr("disabled",true);
+
+    var sec = 0;
+    var counterId = setInterval(function() {
+        sec++;
+        document.getElementById("delete-count-up").innerText = sec;
+    }, 1000);
+
+    $.get("/clearDB", function(data) {
+        console.log(data);
+        if (data.success) {
+            $('#clear').modal('hide');
+        }
+    });
+}
+
+function getTweets(lat, lon, radius, numWords) {
     $.post("/getTweetsFromCoordinates", {
         "lat": lat,
-        "long": long,
-        "radius": radius
+        "long": lon,
+        "radius": radius,
+        "numWords": numWords
     },function(data) {
         console.log(data)
     });
+}
+
+function countries() {
+    google.charts.load('current', {'packages':['geochart']});
+    google.charts.setOnLoadCallback(drawRegionsMap);
+
+    function drawRegionsMap() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'Popularity'],
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+        ]);
+
+        var options = {
+
+            colorAxis: {colors: ['#ffffff','#157BFB']},
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+    }
+
+    jQuery.noConflict();
+    $('#countries').modal('toggle');
+
+
 }

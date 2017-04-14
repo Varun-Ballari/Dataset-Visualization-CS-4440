@@ -6,72 +6,177 @@
     	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="{{ url_for('static',filename='js/script.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
 	</head>
   	<body>
-		<div class = "main maincolor">
-			<h1 class="display-4 heading1 maincolor">Twitter Data Visualization</h1>
-			<label for="exampleInputEmail1" class="color1">Search for string of letters in through a 2010 geo-located dataset of Tweets and see where it occured most often.</label>
-			<hr class="my-4">
-			<div class ="twitter_box">
-				<div class = "twitter_heading">
-					<div class="row">
-						<div class="col-sm-12">
-							<img id="twitter_logo" src="{{ url_for('static',filename='imgs/Twitter_Logo.png') }}" width = 60 height = 60 alt="Twitter" />
-							<h2 class="twitter_title color1">Search Through Twitter!</h2>
-							<p class="twitter_user color2">@CS_4440_Project</p>
+		<div>
+			<div class = "mainTitle">Twitter Data Visualization</div>
+			<div class= "row mainBody zero">
+				<div class="col-sm-4 zero panel">
+					<div class = "indent">
+
+						<div class ="twitter_box topMargin">
+							<div class = "twitter_heading">
+								<div class="row">
+									<div class="col-sm-12">
+										<img id="twitter_logo" src="{{ url_for('static',filename='imgs/Twitter_Logo.png') }}" width = 60 height = 60 alt="Twitter" />
+										<h2 class="twitter_title">Search Twitter!</h2>
+										<p class="color2">@CS4440</p>
+									</div>
+								</div>
+							</div>
+							<div class = "twitter_body">
+								<form>
+									<div class="form-group">
+										<input type="email" class="form-control" id="lat" aria-describedby="emailHelp" placeholder="latitude">
+										<input type="email" class="form-control" id="long" aria-describedby="emailHelp" placeholder="longitude">
+										<input type="email" class="form-control" id="radius" aria-describedby="emailHelp" placeholder="radius">
+
+										<small id="emailHelp" class="form-text color2">Enter a valid coordinate to get results.</small>
+									</div>
+								</form>
+
+							</div>
+							<div class = "twitter_footer">
+								<div class="row">
+									<div class="col-sm-12">
+										<svg width="0" height="0" class="visually-hidden" xmlns="http://www.w3.org/2000/svg">
+										  <symbol id="icon-twitter-reply" viewbox="0 0 65 72">
+											<path d="M41 31h-9V19c0-1.14-.647-2.183-1.668-2.688-1.022-.507-2.243-.39-3.15.302l-21 16C5.438 33.18 5 34.064 5 35s.437 1.82 1.182 2.387l21 16c.533.405 1.174.613 1.82.613.453 0 .908-.103 1.33-.312C31.354 53.183 32 52.14 32 51V39h9c5.514 0 10 4.486 10 10 0 2.21 1.79 4 4 4s4-1.79 4-4c0-9.925-8.075-18-18-18z"/>
+										  </symbol>
+										  <symbol id="icon-twitter-retweet" viewBox="0 0 75 72">
+											<path d="M70.676 36.644C70.166 35.636 69.13 35 68 35h-7V19c0-2.21-1.79-4-4-4H34c-2.21 0-4 1.79-4 4s1.79 4 4 4h18c.552 0 .998.446 1 .998V35h-7c-1.13 0-2.165.636-2.676 1.644-.51 1.01-.412 2.22.257 3.13l11 15C55.148 55.545 56.046 56 57 56s1.855-.455 2.42-1.226l11-15c.668-.912.767-2.122.256-3.13zM40 48H22c-.54 0-.97-.427-.992-.96L21 36h7c1.13 0 2.166-.636 2.677-1.644.51-1.01.412-2.22-.257-3.13l-11-15C18.854 15.455 17.956 15 17 15s-1.854.455-2.42 1.226l-11 15c-.667.912-.767 2.122-.255 3.13C3.835 35.365 4.87 36 6 36h7l.012 16.003c.002 2.208 1.792 3.997 4 3.997h22.99c2.208 0 4-1.79 4-4s-1.792-4-4-4z" />
+										  </symbol>
+										  <symbol id="icon-twitter-fav" viewBox="0 0 54 72">
+											<path d="M38.723,12c-7.187,0-11.16,7.306-11.723,8.131C26.437,19.306,22.504,12,15.277,12C8.791,12,3.533,18.163,3.533,24.647 C3.533,39.964,21.891,55.907,27,56c5.109-0.093,23.467-16.036,23.467-31.353C50.467,18.163,45.209,12,38.723,12z"/>
+										  </symbol>
+										</svg>
+
+										<svg class="icon" style="color: #657786;"><use xlink:href="#icon-twitter-reply" /></svg>
+										<svg class="icon" style="color: #19CF86;"><use xlink:href="#icon-twitter-retweet" /></svg>
+										<svg class="icon" style="color: #E81C4F;"><use xlink:href="#icon-twitter-fav" /></svg>
+									</div>
+								</div>
+							</div>
 						</div>
+
+						<button type="button" class="btn btn-primary btn-sm btn-block" onclick="search()">Search</button>
+						<button type="button" class="btn btn-outline-warning btn-sm btn-block" onclick="load()">Load</button>
+						<button type="button" class="btn btn-outline-danger btn-sm btn-block" onclick="reset()">Reset</button>
+						<button type="button" class="btn btn-outline-success btn-sm btn-block" onclick="countries()">Get Map</button>
+
+
+						<div class="card card-inverse card-success topMargin">
+							<div class="card-block">
+								<blockquote class="card-blockquote">
+
+									<p class="text-center" style="color: #2E5C2E; margin-top:12px;">
+									  <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none; color: #2E5C2E;">
+										<b>Directions &#9660</b>
+									  </a>
+									</p>
+
+									<div class="collapse" id="collapseExample">
+										<ul class="list-group collapse" id="collapseExample">
+											<li class="list-group-item clear">Wait for map to load with current location. (1-2 secs)</li>
+											<li class="list-group-item clear"><kbd>Load</kbd> Click to load 100,000 of most recently uploaded tweets to the MongoDB database. Data will added to existing dataset. (~120 secs)</li>
+
+											<li class="list-group-item clear">Search for through Twitter for most occuring words. Click on a place on the map and get word frequency back.</li>
+											<li class="list-group-item clear">Data will be pulled and analzyed from DB.</li>
+
+											<li class="list-group-item clear">Use the text fields to input in coordinates and radius for a specific range search.</li>
+											<li class="list-group-item clear"><kbd>Reset</kbd> Click to clear database and create new document. (~30 secs)</li>
+										</ul>
+									</div>
+								</blockquote>
+							</div>
+						</div>
+
+						<p class = "text-center zero" style="font-size:12px;"><b>Made by Varun, Smita &#38; Teju</b></p>
+						<p class = "text-center zero" style="font-size:10px; color: #1DA1F3;"><i>Final Project for CS 4440</i></p>
+
 					</div>
 				</div>
-				<div class = "twitter_body">
-					<form>
-					  	<div class="form-group">
-					    	<input type="email" style="float:left; width: 35%; padding-right:0%;" class="form-control" id="lat" aria-describedby="emailHelp" placeholder="latitude">
-							<input type="email" style="float:left; width: 35%; padding-right:0%;" class="form-control" id="long" aria-describedby="emailHelp" placeholder="longitude">
-							<input type="email" style="float:left; width: 30%;" class="form-control" id="radius" aria-describedby="emailHelp" placeholder="radius">
-
-							<small id="emailHelp" class="form-text text-muted color2">Enter a valid coordinate to get results.</small>
-						</div>
-					</form>
-					<button type="button" class="btn btn-primary" onclick="getTweetsFromButton()">Search</button>
-
+				<div class="col-sm-8 zero">
+					<div id="map"></div>
 				</div>
-				<div class = "twitter_footer">
-					<div class="row">
-						<div class="col-sm-12">
+			</div>
+		</div>
 
-							<!-- Code from: https://codepen.io/theaemarie/pen/RGAwZj -->
-							<svg width="0" height="0" class="visually-hidden" xmlns="http://www.w3.org/2000/svg">
-							  <symbol id="icon-twitter-reply" viewbox="0 0 65 72">
-							    <path d="M41 31h-9V19c0-1.14-.647-2.183-1.668-2.688-1.022-.507-2.243-.39-3.15.302l-21 16C5.438 33.18 5 34.064 5 35s.437 1.82 1.182 2.387l21 16c.533.405 1.174.613 1.82.613.453 0 .908-.103 1.33-.312C31.354 53.183 32 52.14 32 51V39h9c5.514 0 10 4.486 10 10 0 2.21 1.79 4 4 4s4-1.79 4-4c0-9.925-8.075-18-18-18z"/>
-							  </symbol>
-							  <symbol id="icon-twitter-retweet" viewBox="0 0 75 72">
-							    <path d="M70.676 36.644C70.166 35.636 69.13 35 68 35h-7V19c0-2.21-1.79-4-4-4H34c-2.21 0-4 1.79-4 4s1.79 4 4 4h18c.552 0 .998.446 1 .998V35h-7c-1.13 0-2.165.636-2.676 1.644-.51 1.01-.412 2.22.257 3.13l11 15C55.148 55.545 56.046 56 57 56s1.855-.455 2.42-1.226l11-15c.668-.912.767-2.122.256-3.13zM40 48H22c-.54 0-.97-.427-.992-.96L21 36h7c1.13 0 2.166-.636 2.677-1.644.51-1.01.412-2.22-.257-3.13l-11-15C18.854 15.455 17.956 15 17 15s-1.854.455-2.42 1.226l-11 15c-.667.912-.767 2.122-.255 3.13C3.835 35.365 4.87 36 6 36h7l.012 16.003c.002 2.208 1.792 3.997 4 3.997h22.99c2.208 0 4-1.79 4-4s-1.792-4-4-4z" />
-							  </symbol>
-							  <symbol id="icon-twitter-fav" viewBox="0 0 54 72">
-							    <path d="M38.723,12c-7.187,0-11.16,7.306-11.723,8.131C26.437,19.306,22.504,12,15.277,12C8.791,12,3.533,18.163,3.533,24.647 C3.533,39.964,21.891,55.907,27,56c5.109-0.093,23.467-16.036,23.467-31.353C50.467,18.163,45.209,12,38.723,12z"/>
-							  </symbol>
-							</svg>
 
-							<svg class="icon" style="color: #657786;"><use xlink:href="#icon-twitter-reply" /></svg>
-							<svg class="icon" style="color: #19CF86;"><use xlink:href="#icon-twitter-retweet" /></svg>
-							<svg class="icon" style="color: #E81C4F;"><use xlink:href="#icon-twitter-fav" /></svg>
-						</div>
+		<!-- Error Modal -->
+		<div class="modal fade" id="error" tabindex="-1" role="dialog" aria-labelledby="error" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+			      	<div class="modal-header">
+			        	<h5 class="modal-title" id="errorTitle">Error</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          	<span aria-hidden="true">&times;</span>
+				        </button>
+			      	</div>
+			      	<div class="modal-body">
+			        	<p id="errorMessage">Format of information is incorrect. Please fill in all fields according to the constraints.</p>
+			      	</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<!-- Loading Modal -->
+		<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="loading" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="loadingTitle">Loading Data from Twitter...</h5>
+					</div>
+					<div class="modal-body" style="height:250px;">
+						<div id="loader" style="border-top: 16px solid #F0AD4E;"></div>
+						<p>Time Elasped: <span id="count-up">0</span> secs</p>
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<h3>Google Maps</h3>
-	    	<div id="map"></div>
+		<!-- Clear Modal -->
+		<div class="modal fade" id="clear" tabindex="-1" role="dialog" aria-labelledby="clear" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+		    	<div class="modal-content">
+			      	<div class="modal-header">
+			        	<h5 class="modal-title" id="clearTitle">Are you sure?</h5>
+				        <button type="button" id="deleteClose" class="close" data-dismiss="modal" aria-label="Close">
+				          	<span aria-hidden="true">&times;</span>
+				        </button>
+			      	</div>
+			      	<div class="modal-body">
+			        	<p id="clearMessage">You are about to clear the entire database and create a new collection. This is delete all the previously added Tweets and will start a new session. Are you sure you want to continue?</p>
+			      	</div>
+					<div class="modal-footer">
+						<button type="button" id="deletebutton" class="btn btn-danger" onclick="deleteDB()">Delete DB</button>
+					</div>
+					<div class="modal-body" id="deleteLoader" style="height:250px; display:none;">
+						<div id="loader" style="border-top: 16px solid #EF4F55;"></div>
+						<p>Time Elasped: <span id="delete-count-up">0</span> secs</p>
+					</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<!-- Countries Modal -->
+		<div class="modal fade bd-example-modal-lg" id="countries" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true" style="height:90%; width:90%;">
+		  	<div class="modal-dialog modal-lg">
+		    	<div class="modal-content">
+					<div id="regions_div" style="width: 100%; height: 100%;"></div>
+		    	</div>
+		  	</div>
 		</div>
 
 	    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCxAq9ZEcDIW_mXx5gepvXKPNuTqNueo1o&callback=initMap" async defer></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 	 </body>
 </html>
