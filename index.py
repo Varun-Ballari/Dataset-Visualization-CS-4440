@@ -5,6 +5,7 @@ import pymongo
 from pymongo import MongoClient
 import pprint
 import random
+import pycountry
 
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
@@ -32,6 +33,7 @@ app = Flask(__name__)
 client = pymongo.MongoClient("localhost", 27017)
 db = client.CS4440
 coordinates = db.coordinates
+countries = db.countries
 
 
 @app.route('/')
@@ -146,13 +148,33 @@ def loadDB():
         lang = "en",
     )
 
-    i = 0
+    ctyList = list(pycountry.countries)
+
     for tweet in tweet_list:
+
+        # add tweet coordinates list
         lat = random.randint(-91, 90)
         lng = random.randint(-181, 180)
-
         node = db.coordinates.update({ "lat": lat, "long": lng }, {"$push": {"tweets" : tweet.text}})
-        i += 1
+
+
+        # count increment - countries list
+
+        country = random.choice(ctyList).name
+        print(country)
+
+        flag = bool(db.countries.find_one({'country': country}))
+        if(flag == False):
+            db.countries.insert_one(
+            {
+                'country' : country,
+                'count' : 1
+            })
+        else :
+            db.countries.update({
+                'country' : country},
+                {'$inc' : {'count':int(1)}
+            })
 
     return jsonify({"success": True})
 
@@ -165,6 +187,22 @@ def clearDB():
             post_id = coordinates.insert({"lat": i,"long": j,"tweets":[]})
 
     return jsonify({"success": True})
+
+
+@app.route('/countries')
+def readCountry():
+    cursor = list(db.countries.find({},{'_id': False}))
+    countryList = []
+
+    for i in cursor:
+        temp = []
+        for key, value in i.items():
+            temp.append(value)
+        countryList.append(temp)
+
+    # print(countryList)
+    return jsonify({"success": True, "countryList" : countryList})
+
 
 
 

@@ -231,16 +231,18 @@ function countries() {
     google.charts.setOnLoadCallback(drawRegionsMap);
 
     function drawRegionsMap() {
+        var returnAjax = $.ajax({
+             url: "/countries",
+             dataType: "json",
+             async: false
+        });
 
-        var data = google.visualization.arrayToDataTable([
-          ['Country', 'Popularity'],
-          ['Germany', 200],
-          ['United States', 300],
-          ['Brazil', 400],
-          ['Canada', 500],
-          ['France', 600],
-          ['RU', 700]
-        ]);
+        var resList = returnAjax.responseJSON.countryList
+        resList.unshift(['Country', 'Number of Tweets'])
+
+        console.log(resList)
+
+        var data = new google.visualization.arrayToDataTable(resList);
 
         var options = {
             colorAxis: {colors: ['#ffffff','#157BFB']},
