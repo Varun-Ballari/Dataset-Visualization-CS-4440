@@ -34,10 +34,16 @@
 							<div class = "twitter_body">
 								<form>
 									<div class="form-group">
-										<input type="email" class="form-control" id="lat" aria-describedby="emailHelp" placeholder="latitude">
-										<input type="email" class="form-control" id="long" aria-describedby="emailHelp" placeholder="longitude">
-										<input type="email" class="form-control" id="radius" aria-describedby="emailHelp" placeholder="radius">
-
+										<input type="email" class="form-control spacing" id="lat" aria-describedby="emailHelp" placeholder="latitude">
+										<input type="email" class="form-control spacing" id="long" aria-describedby="emailHelp" placeholder="longitude">
+										<input type="email" class="form-control spacing" id="radius" aria-describedby="emailHelp" placeholder="radius">
+										<input type="email" class="form-control spacing" id="numWords" aria-describedby="emailHelp" placeholder="number of words">
+										<label class="switch spacing">
+											<input id="switch" type="checkbox" checked>
+										  	<div class="slider round">
+											</div>
+										</label>
+										<small id="emailHelp" class="form-text color2">Switch - On: Ignore common words, Off: Include common words</small>
 										<small id="emailHelp" class="form-text color2">Enter a valid coordinate to get results.</small>
 									</div>
 								</form>
@@ -66,10 +72,21 @@
 							</div>
 						</div>
 
-						<button type="button" class="btn btn-primary btn-sm btn-block" onclick="search()">Search</button>
+						<button type="button" class="btn btn-primary btn-sm btn-block" onclick="placeMarker(false, 0)">Search</button>
 						<button type="button" class="btn btn-outline-warning btn-sm btn-block" onclick="load()">Load</button>
 						<button type="button" class="btn btn-outline-danger btn-sm btn-block" onclick="reset()">Reset</button>
 						<button type="button" class="btn btn-outline-success btn-sm btn-block" onclick="countries()">Get Map</button>
+
+						<div class="card topMargin" style="width: 100%;">
+							<div class="card-block">
+								<h4 class="card-title">MongoDB Statistics</h4>
+						  	</div>
+						  	<ul class="list-group list-group-flush">
+								<li class="list-group-item">Search Time (ms) <span id="searchtime" class="badge badge-pill badge-primary" style="margin-left:10px;">6</span></li>
+						    	<li class="list-group-item">Load Time (ms) <span id="loadtime" class="badge badge-pill badge-warning" style="margin-left:25px;">4920</span></li>
+								<li class="list-group-item">Reset Time (ms) <span id="resettime" class="badge badge-pill badge-danger" style="margin-left:20px;">14176</span></li>
+						  	</ul>
+						</div>
 
 
 						<div class="card card-inverse card-success topMargin">
@@ -167,16 +184,67 @@
 		</div>
 
 		<!-- Countries Modal -->
-		<div class="modal fade bd-example-modal-lg" id="countries" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true" style="height:90%; width:90%;">
+		<div class="modal fade bd-example-modal-lg" id="countries" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true">
 		  	<div class="modal-dialog modal-lg">
 		    	<div class="modal-content">
-					<div id="regions_div" style="width: 100%; height: 100%;"></div>
+					<div class="modal-header">
+						<h5 class="countries-title">Country Statistics</h5>
+					   	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						 	<span aria-hidden="true">&times;</span>
+					   	</button>
+					 </div>
+					 <div class="modal-body">
+					 	<div id="regions_div" style="height: 700px;"></div>
+					</div>
 		    	</div>
 		  	</div>
 		</div>
 
+		<!-- Results Modal -->
+
+		<!-- <div class="modal fade bd-example-modal-lg" id="results" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Results</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					 </div>
+					 <div class="modal-body">
+						<div id="donut_single" style="width: 900px; height:900px;"></div>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="modal fade bd-example-modal-lg" id="results" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+				  <h5 class="modal-title">Results</h5>
+				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+				  </button>
+		      </div>
+			  <div class="modal-body" id="resultsLoader" style="height:250px;">
+				  <div id="loader" style="border-top: 16px solid #0275D8;"></div>
+				  <p>Time Elasped: <span id="results-count-up">0</span> secs</p>
+			  </div>
+		      <div class="modal-body" id="piechart">
+				  <div id="pie_single" style="width: inherit; height:900px;"></div>
+		      </div>
+		      <div class="modal-footer">
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+
 	    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCxAq9ZEcDIW_mXx5gepvXKPNuTqNueo1o&callback=initMap" async defer></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
 
 	 </body>
 </html>

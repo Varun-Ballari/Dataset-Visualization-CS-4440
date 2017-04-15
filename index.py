@@ -33,109 +33,109 @@ client = pymongo.MongoClient("localhost", 27017)
 db = client.CS4440
 coordinates = db.coordinates
 
+
 @app.route('/')
 def index():
-
-    # pp = pprint.PrettyPrinter(indent=4)
-    #
-    # cur = coordinates.find()
-    #
-    # pp.pprint(cur)
-    #
-    # for doc in cur:
-    #     pp.pprint(doc)
-
     return render_template('index.html')
 
 
-# @app.route('/getTweetsFromCoordinates', methods=['POST'])
-# def getTweets():
-#     geocode = request.form
-#     latCor = geocode.getlist('lat')[0]
-#     longCor = geocode.getlist('long')[0]
-#     radius = geocode.getlist('radius')[0]
-#
-#     geoCodeSearch = latCor + "," + longCor + "," + radius + "mi"
-#
-#     print(geoCodeSearch)
-#
-#     tweet_list = api.search (
-#         q = '""',
-#         count = 10,
-#         lang = "en",
-#         geocode = geoCodeSearch
-#     )
-#
-#     for tweet in tweet_list:
-#         print(tweet.text)
-#
-#     return jsonify({"success": True})
-
-@app.route('/getTweetsFromCoordinates', methods=['POST'])
+@app.route('/getTweetsFromCoordinates', methods=['GET'])
 def findFunction():
-    geocode = request.form
-    lat = geocode.getlist('lat')[0]
-    lon = geocode.getlist('long')[0]
-    radius = geocode.getlist('radius')[0]
-    numWords = geocode.getlist('numWords')[0]
+    geocode = request.args#request.form
+    lat = geocode.get('lat') #geocode.getlist('lat')[0]
+    lng = geocode.get('lng') #geocode.getlist('long')[0]
+    radius = geocode.get('radius') #geocode.getlist('radius')[0]
+    numWords = geocode.get('numWords') #geocode.getlist('numWords')[0]
+    commonWords = geocode.get('commonWords') #geocode.getlist('numWords')[0]
 
-    lat = int(lat)
-    lon = int(lon)
+    print(geocode, lat, lng, radius, numWords)
+
+    lat = int(float(lat))
+    lng = int(float(lng))
     radius = int(radius)
     numWords = int(numWords)
 
-    aList = []
-    finder = coordinates.find({"$and": [
-             {"lat": lat}, {"long":lon}]})
+    tweetList = []
 
-    finder2 = coordinates.find({"$and": [
-                 {"lat": lat + radius}, {"long":lon + radius}]})
+    # up and right
+    for i in range(radius):
+        for j in range(radius):
 
-    finder3 = coordinates.find({"$and": [
-             {"lat": lat - radius}, {"long":lon - radius}]})
+            latSearch = lat + i
+            lngSearch = lng + j
 
-    finder4 = coordinates.find({"$and": [
-                 {"lat": lat + radius}, {"long":lon - radius}]})
 
-    finder5 = coordinates.find({"$and": [
-                 {"lat": lat - radius}, {"long":lon + radius}]})
-    # print(finder.distinct("tweet"))
-    # with open(filename,"w") as f:
-    aList.append(finder.distinct("tweets"))
-    aList.append(finder2.distinct("tweets"))
-    aList.append(finder3.distinct("tweets"))
-    aList.append(finder4.distinct("tweets"))
-    aList.append(finder5.distinct("tweets"))
-    sentenceList = [item for row in aList for item in row]
-    # sum(aList,[])
+            if (latSearch > 90):
+                latSearch = latSearch - (2*i)
+
+            if (lngSearch > 180):
+                lngSearch = -180 + j
+
+            # print(latSearch, lngSearch)
+
+            finder = coordinates.find({"$and": [
+                     {"lat": latSearch}, {"long":lngSearch}]})
+            tweetList.append(finder.distinct("tweets"))
+
+    # down and left
+    for i in range(radius):
+        for j in range(radius):
+
+            latSearch = lat - i
+            lngSearch = lng - j
+
+            if (latSearch < -90):
+                latSearch = latSearch + (2*i)
+
+            if (lngSearch < -180):
+                lngSearch = 180 - j
+
+            # print(latSearch, lngSearch)
+
+            finder = coordinates.find({"$and": [
+                     {"lat": latSearch}, {"long":lngSearch}]})
+
+            tweetList.append(finder.distinct("tweets"))
+
+
+    sentenceList = [item for row in tweetList for item in row]
     # print(sentenceList)
-    # print(aList)
-    cv = CountVectorizer()
-    x = cv.fit_transform(sentenceList).toarray()
-    y = cv.get_feature_names()
-    dist = np.sum(x, axis = 0)
 
-    sumwords = 0
-    aDict = {}
-    bList = []
-    for tag,count in zip(y,dist):
-        # print (count,tag)
-        aDict[tag] = count
-        bList.append([tag,count])
-        sumwords += count
-    finalList = sorted(bList, key = lambda x:x[1], reverse = True)
-    wordsList = []
-    countsList = []
-    for each in finalList:
-        wordsList.append(each[0])
-        countsList.append(int(each[1]))
-    print(wordsList[:numWords])
-    print(countsList[:numWords])
-    print(sumwords)
+    if (len(sentenceList) > 0):
+        cv = CountVectorizer()
+        x = cv.fit_transform(sentenceList).toarray()
+        y = cv.get_feature_names()
+        dist = np.sum(x, axis = 0)
 
+        sumWords = 0
+        aDict = {}
+        bList = []
+        for tag,count in zip(y,dist):
+            # print (count,tag)
+            aDict[tag] = count
+            bList.append([tag,int(count)])
+            sumWords += count
+        finalList = sorted(bList, key = lambda x:x[1], reverse = True)
+        wordsList = []
+        countsList = []
+        for each in finalList:
+            wordsList.append(each[0])
+            countsList.append(int(each[1]))
 
+    else:
+        finalList = []
+        wordsList = []
+        countsList = []
+        sumWords = 0
 
-    return jsonify({"words": wordsList[:numWords], "counts": countsList[:numWords], "sumwords": int(sumwords})
+    if (sumWords > numWords):
+        print(finalList[:numWords], wordsList[:numWords], countsList[:numWords], sumWords)
+
+        return jsonify({"finalList":finalList[:numWords], "words": wordsList[:numWords], "counts": countsList[:numWords], "sumWords": int(sumWords)})
+    else:
+        print("HERE")
+
+        return jsonify({"finalList":finalList, "words": wordsList, "counts": countsList, "sumWords": int(sumWords)})
 
 
 @app.route('/loadDB')
@@ -148,23 +148,21 @@ def loadDB():
 
     i = 0
     for tweet in tweet_list:
-        lat = -180#random.randint(-181, 180)
-        lon = -180#random.randint(-181, 180)
-        # print(lat, lon)
+        lat = random.randint(-91, 90)
+        lng = random.randint(-181, 180)
 
-        node = db.coordinates.update({ "lat": lat, "long": lon }, {"$push": {"tweets" : tweet.text}})
+        node = db.coordinates.update({ "lat": lat, "long": lng }, {"$push": {"tweets" : tweet.text}})
         i += 1
 
-    print(i)
     return jsonify({"success": True})
 
 
 @app.route('/clearDB')
 def clearDB():
-    # coordinates.drop();
-    # for i in range(-180, 181):
-    #     for j in range(-180, 181):
-    #         post_id = coordinates.insert({"lat": i,"long": j,"tweets":[]})
+    coordinates.drop();
+    for i in range(-90, 91):
+        for j in range(-180, 181):
+            post_id = coordinates.insert({"lat": i,"long": j,"tweets":[]})
 
     return jsonify({"success": True})
 
