@@ -82,6 +82,7 @@
 								<h4 class="card-title">MongoDB Statistics</h4>
 						  	</div>
 						  	<ul class="list-group list-group-flush">
+								<li class="list-group-item">Number of Tweets in DB <span id="numTweets" class="badge badge-pill badge-success" style="margin-left:10px;">100</span></li>
 								<li class="list-group-item">Search Time (ms) <span id="searchtime" class="badge badge-pill badge-primary" style="margin-left:10px;">6</span></li>
 						    	<li class="list-group-item">Load Time (ms) <span id="loadtime" class="badge badge-pill badge-warning" style="margin-left:25px;">4920</span></li>
 								<li class="list-group-item">Reset Time (ms) <span id="resettime" class="badge badge-pill badge-danger" style="margin-left:20px;">14176</span></li>
@@ -202,42 +203,28 @@
 
 		<!-- Results Modal -->
 
-		<!-- <div class="modal fade bd-example-modal-lg" id="results" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Results</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					 </div>
-					 <div class="modal-body">
-						<div id="donut_single" style="width: 900px; height:900px;"></div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
 		<div class="modal fade bd-example-modal-lg" id="results" tabindex="-1" role="dialog" aria-labelledby="countries" aria-hidden="true">
-		  <div class="modal-dialog modal-lg">
-		    <div class="modal-content">
-		      <div class="modal-header">
-				  <h5 class="modal-title">Results</h5>
-				  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					  <span aria-hidden="true">&times;</span>
-				  </button>
-		      </div>
-			  <div class="modal-body" id="resultsLoader" style="height:250px;">
-				  <div id="loader" style="border-top: 16px solid #0275D8;"></div>
-				  <p>Time Elasped: <span id="results-count-up">0</span> secs</p>
-			  </div>
-		      <div class="modal-body" id="piechart">
-				  <div id="pie_single" style="width: inherit; height:900px;"></div>
-		      </div>
-		      <div class="modal-footer">
-		      </div>
-		    </div>
-		  </div>
+			<div class="modal-dialog modal-lg">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+				  		<h5 class="modal-title" id="resultsTitle">Results</h5>
+			  			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				  			<span aria-hidden="true">&times;</span>
+			  			</button>
+		      		</div>
+				  	<div class="modal-body" id="resultsLoader" style="height:250px;">
+						<div id="loader" style="border-top: 16px solid #0275D8;"></div>
+					  	<p>Time Elasped: <span id="results-count-up">0</span> secs</p>
+				  	</div>
+					<div class="modal-body" id="word" style="text-align:center; color:#1DA1F2;">
+						<h1 id="mostcommonword"></h1>
+					</div>
+				    <div class="modal-body" id="piechart">
+					  	<div id="pie_single" style="width: 50%; height:600px; float:left;"></div>
+					  	<div id="bubble_single" style="width: 50%; height:600px; float:right;"></div>
+				  	</div>
+			   	</div>
+		  	</div>
 		</div>
 
 

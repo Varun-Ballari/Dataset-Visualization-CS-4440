@@ -34,6 +34,7 @@ client = pymongo.MongoClient("localhost", 27017)
 db = client.CS4440
 coordinates = db.coordinates
 countries = db.countries
+countTweets = db.countTweets
 
 
 @app.route('/')
@@ -119,25 +120,29 @@ def findFunction():
             sumWords += count
         finalList = sorted(bList, key = lambda x:x[1], reverse = True)
         wordsList = []
-        countsList = []
+        freqList = []
+        numLetter = []
+        everything = []
         for each in finalList:
             wordsList.append(each[0])
-            countsList.append(int(each[1]))
-
+            freqList.append(int(each[1]))
+            numLetter.append(len(each[0]))
+            everything.append([each[0], int(each[1]),len(each[0]), len(each[0])])
     else:
+        everything = []
         finalList = []
         wordsList = []
-        countsList = []
+        freqList = []
         sumWords = 0
 
     if (sumWords > numWords):
-        print(finalList[:numWords], wordsList[:numWords], countsList[:numWords], sumWords)
+        # print(finalList[:numWords], wordsList[:numWords], freqList[:numWords], sumWords)
 
-        return jsonify({"finalList":finalList[:numWords], "words": wordsList[:numWords], "counts": countsList[:numWords], "sumWords": int(sumWords)})
+        return jsonify({"everything": everything[:numWords], "finalList":finalList[:numWords], "words": wordsList[:numWords], "frequency": freqList[:numWords], "sumWords": int(sumWords)})
     else:
-        print("HERE")
+        # print("HERE")
 
-        return jsonify({"finalList":finalList, "words": wordsList, "counts": countsList, "sumWords": int(sumWords)})
+        return jsonify({"everything": everything, "finalList":finalList, "words": wordsList, "frequency": freqList, "sumWords": int(sumWords)})
 
 
 @app.route('/loadDB')
@@ -161,37 +166,54 @@ def loadDB():
         # count increment - countries list
 
         country = random.choice(ctyList).name
-        print(country)
 
         flag = bool(db.countries.find_one({'country': country}))
-        if(flag == False):
-            db.countries.insert_one(
+        if (flag == False):
+            countries.insert_one(
             {
                 'country' : country,
                 'count' : 1
             })
         else :
-            db.countries.update({
+            countries.update({
                 'country' : country},
                 {'$inc' : {'count':int(1)}
             })
 
-    return jsonify({"success": True})
+        # count increment - countTweets
+    countTweets.update_one(
+        {},
+        {
+            '$inc': {'numTweets': int(len(tweet_list))}
+        })
+
+    ct = list(countTweets.find({},{'_id': False}))
+    # print(ct[0]['numTweets'])
+
+    return jsonify({"success": True, "count": ct[0]['numTweets']})
 
 
 @app.route('/clearDB')
 def clearDB():
-    coordinates.drop();
+    coordinates.drop()
+    countries.drop()
+    countTweets.drop()
+
+    countTweets.insert_one(
+    {
+        'numTweets': 0
+    })
+
     for i in range(-90, 91):
         for j in range(-180, 181):
             post_id = coordinates.insert({"lat": i,"long": j,"tweets":[]})
 
-    return jsonify({"success": True})
+    return jsonify({"success": True, "count" : 0})
 
 
 @app.route('/countries')
 def readCountry():
-    cursor = list(db.countries.find({},{'_id': False}))
+    cursor = list(countries.find({},{'_id': False}))
     countryList = []
 
     for i in cursor:
@@ -203,7 +225,10 @@ def readCountry():
     # print(countryList)
     return jsonify({"success": True, "countryList" : countryList})
 
-
+@app.route('/onAppLoad')
+def onAppLoad():
+    ct = list(countTweets.find({},{'_id': False}))
+    return jsonify({"success": True, "count": ct[0]['numTweets']})
 
 
 if __name__ == '__main__':

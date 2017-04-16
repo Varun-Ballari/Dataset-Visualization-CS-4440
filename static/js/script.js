@@ -1,5 +1,17 @@
 var mapGlobal;
 
+$(document).ready(function() {
+    var returnAjax = $.ajax({
+         url: "/onAppLoad",
+         dataType: "json",
+         async: false
+    });
+
+    var count = returnAjax.responseJSON.count
+    document.getElementById("numTweets").innerText = count;
+    console.log("ready!");
+});
+
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
     var color = '#';
@@ -63,26 +75,54 @@ function initMap() {
 function placeMarker(isMap, position) {
     var color = getRandomColor()
 
-    // try {
-    if (!isMap) {
-        lat = parseInt(document.getElementById("lat").value);
-        lng = parseInt(document.getElementById("long").value);
-        var positionMap = {lat: lat, lng: lng};
-    } else {
-        var positionMap = position
-        lat = positionMap.lat
-        lng = positionMap.lng
-    }
-    rad = parseInt(document.getElementById("radius").value);
-    numWords = parseInt(document.getElementById("numWords").value);
-    commonWords = $('#switch').prop('checked')
+    try {
+        if (!isMap) {
 
-    // } catch(err) {
-    //     console.log("error - parsingInt")
-    //     jQuery.noConflict();
-    //     $('#error').modal('toggle');
-    //     return;
-    // }
+            lat = document.getElementById("lat").value;
+            lng = document.getElementById("long").value;
+            rad = document.getElementById("radius").value;
+            numWords = document.getElementById("numWords").value;
+
+            if (lat == "" || lng == "" || rad == "" || numWords == "") {
+                console.log("error - null - not map")
+                jQuery.noConflict();
+                $('#error').modal('toggle');
+                return;
+            }
+
+            lat = parseInt(lat);
+            lng = parseInt(lng);
+            rad = parseInt(rad);
+            numWords = parseInt(numWords);
+            var positionMap = {lat: lat, lng: lng};
+
+        } else {
+            var positionMap = position
+            lat = positionMap.lat
+            lng = positionMap.lng
+
+            rad = document.getElementById("radius").value;
+            numWords = document.getElementById("numWords").value;
+
+            if (rad == "" || numWords == "") {
+                console.log("error - null - map")
+                jQuery.noConflict();
+                $('#error').modal('toggle');
+                return;
+            }
+
+            rad = parseInt(rad);
+            numWords = parseInt(numWords);
+        }
+
+        commonWords = $('#switch').prop('checked')
+
+    } catch(err) {
+        console.log("error - parsingInt")
+        jQuery.noConflict();
+        $('#error').modal('toggle');
+        return;
+    }
 
     var marker = new google.maps.Marker({
         position: positionMap,
@@ -128,11 +168,12 @@ function load() {
     }, 1);
 
     $.get("/loadDB", function(data) {
-        console.log(data);
+        // console.log(data);
         if (data.success) {
             $('#loading').modal('hide');
             clearInterval(msId);
             document.getElementById("loadtime").innerText = ms * 4;
+            document.getElementById("numTweets").innerText = data.count;
         }
     });
 }
@@ -158,22 +199,27 @@ function deleteDB() {
 
 
     $.get("/clearDB", function(data) {
-        console.log(data);
+        // console.log(data);
         if (data.success) {
             $('#clear').modal('hide');
             clearInterval(msId);
             document.getElementById("resettime").innerText = ms * 4;
-
+            $("#deletebutton").attr("disabled",false);
+            $("#deleteClose").attr("disabled",false);
+            document.getElementById("numTweets").innerText = data.count;
         }
     });
 }
 
+
 function getTweets(lat, lng, radius, numWords, commonWords) {
-    console.log("HT")
+
+    console.log(lat, lng, radius, numWords, commonWords)
     jQuery.noConflict();
     $('#results').modal('toggle');
     $('#resultsLoader').show()
     $('#piechart').hide()
+    // $('#resultsTitle').text("Results at (" + lat + ", " + lng + ")")
 
     var ms = 0;
     var sec = 0;
@@ -199,28 +245,48 @@ function getTweets(lat, lng, radius, numWords, commonWords) {
                      "commonWords": commonWords
                  },
              dataType: "json",
-
              async: false
         });
 
-        var resList = returnAjax.responseJSON.finalList
-        resList.unshift(['Word', 'Frequency'])
+        var resFinalList = returnAjax.responseJSON.finalList
+        resFinalList.unshift(['Word', 'Frequency'])
 
-        console.log(resList)
-
-        // resList.unshift(['Word', 'Frequency'])
-        var data = new google.visualization.arrayToDataTable(resList);
-        var options = {
+        var dataPie = new google.visualization.arrayToDataTable(resFinalList);
+        var optionsPie = {
             'title': 'Pie Chart of Most Occuring Words',
-            'width': $(window).width() / 2,
-            'height':900
+            'width': $(window).width() / 4,
+            'height':600
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('pie_single'));
-        chart.draw(data, options);
+        var chartPie = new google.visualization.PieChart(document.getElementById('pie_single'));
+        chartPie.draw(dataPie, optionsPie);
+
+        try {
+            $('#mostcommonword').text(resFinalList[1][0] + " - " + resFinalList[1][1]);
+        } catch (err) {
+            $('#mostcommonword').text('No Tweets Found In This Region.');
+        }
+
+        var resEverything = returnAjax.responseJSON.everything
+        resEverything.unshift(['Word', 'Frequency', 'Number of Letters','Number of Letters'])
+
+        var dataBubble = new google.visualization.arrayToDataTable(resEverything);
+        var optionsBubble = {
+            'title': 'Correlation between Frequency of Words and Number of Letters in a word',
+            'width': $(window).width() / 4,
+            'height':600,
+            hAxis: {title: 'Frequency'},
+            vAxis: {title: 'Words and Number of Letters'},
+            bubble: {textStyle: {fontSize: 11}}
+        };
+
+        var chartBubble = new google.visualization.BubbleChart(document.getElementById('bubble_single'));
+        chartBubble.draw(dataBubble, optionsBubble);
+
 
         $('#resultsLoader').css('display','none')
         $('#piechart').show()
+
         clearInterval(msId);
         document.getElementById("searchtime").innerText = ms * 4;
     }
@@ -240,7 +306,7 @@ function countries() {
         var resList = returnAjax.responseJSON.countryList
         resList.unshift(['Country', 'Number of Tweets'])
 
-        console.log(resList)
+        // console.log(resList)
 
         var data = new google.visualization.arrayToDataTable(resList);
 
