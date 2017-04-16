@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, jsonify
 import os
 import tweepy
 import pymongo
-from pymongo import MongoClient
 import pprint
 import random
 import pycountry
@@ -10,14 +9,7 @@ import pycountry
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
-
-keys = {
-    'consumer_key': 'bcrYegc5EJtupdfL9e8TPQ5LK',
-    'consumer_secret': 'woW7Ny8ukLcaaAkn6UHann36q4kOTo8dhpFbE1dc6UmDYZ3BRn',
-    'access_token': '190970246-NXuSdEZoEJeC1a9gUlRvkcS5u6mAOub7UZu1PZH0',
-    'access_token_secret': 'jcOlJZc7lbTDbpCqcnG3zu2IMhxWImiNXKblHfFVNHGm8',
-}
-
+from keys import keys
 
 CONSUMER_KEY = keys['consumer_key'] #os.environ.get('consumer_key')
 CONSUMER_SECRET = keys['consumer_secret'] #os.environ.get('consumer_secret')
