@@ -9,7 +9,10 @@ import pycountry
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
-from keys import keys
+try:
+    from keys import keys
+except:
+    print("Keys File not Found. Online Access")
 
 CONSUMER_KEY = os.environ.get('CONSUMER_KEY') or keys['consumer_key']
 CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET') or keys['consumer_secret']
