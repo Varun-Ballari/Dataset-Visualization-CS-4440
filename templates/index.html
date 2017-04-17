@@ -172,7 +172,16 @@
 			      	</div>
 			      	<div class="modal-body">
 			        	<p id="clearMessage">You are about to clear the entire database and create a new collection. This is delete all the previously added Tweets and will start a new session. Are you sure you want to continue?</p>
-			      	</div>
+						<form>
+							<div class="form-group">
+								<input type="password" class="form-control spacing" id="deleteDBpassword" aria-describedby="deleteDBpassword" placeholder="Admin Password">
+							</div>
+							<div class="form-group" id="passwordNull" style="display:none;">
+								<p style="color:red;">Password is incorrect!</p>
+							</div>
+						</form>
+					</div>
+
 					<div class="modal-footer">
 						<button type="button" id="deletebutton" class="btn btn-danger" onclick="deleteDB()">Delete DB</button>
 					</div>

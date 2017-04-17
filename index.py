@@ -32,6 +32,7 @@ PASSWORD = os.environ.get('PASSWORD') or keys['password']
 client = pymongo.MongoClient("mongodb://" + USERNAME + ":" + PASSWORD+ "@cluster0-shard-00-00-99szw.mongodb.net:27017,cluster0-shard-00-01-99szw.mongodb.net:27017,cluster0-shard-00-02-99szw.mongodb.net:27017/admin?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
 # client = pymongo.MongoClient("localhost", 27017)
 
+DELETE_DB_PASSWORD = os.environ.get('DELETE_DB_PASSWORD') or keys['delete_db_password']
 
 db = client.CS4440
 coordinates = db.coordinates
@@ -195,8 +196,14 @@ def loadDB():
     return jsonify({"success": True, "count": ct[0]['numTweets']})
 
 
-@app.route('/clearDB')
+@app.route('/clearDB', methods=['GET'])
 def clearDB():
+    params = request.args
+    deletePassword = params.get('password')
+
+    if deletePassword != DELETE_DB_PASSWORD:
+        return jsonify({"success": False})
+
     coordinates.drop()
     countries.drop()
     countTweets.drop()

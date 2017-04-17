@@ -184,6 +184,9 @@ function reset() {
 }
 
 function deleteDB() {
+
+    $('#passwordNull').hide()
+
     console.log("deleting")
     $('#deleteLoader').show()
     $("#deletebutton").attr("disabled",true);
@@ -197,18 +200,32 @@ function deleteDB() {
         document.getElementById("delete-count-up").innerText = sec;
     }, 1);
 
-
-    $.get("/clearDB", function(data) {
-        // console.log(data);
-        if (data.success) {
-            $('#clear').modal('hide');
-            clearInterval(msId);
-            document.getElementById("resettime").innerText = ms * 4;
-            $("#deletebutton").attr("disabled",false);
-            $("#deleteClose").attr("disabled",false);
-            document.getElementById("numTweets").innerText = data.count;
-        }
+    console.log(document.getElementById("deleteDBpassword").value)
+    var returnAjax = $.ajax({
+         url: "/clearDB",
+         data :
+             {
+                'password': document.getElementById("deleteDBpassword").value
+             },
+         dataType: "json",
+         async: false
     });
+
+    var res = returnAjax.responseJSON
+
+    console.log(res);
+    if (res.success) {
+        $('#clear').modal('hide');
+    } else {
+        $('#passwordNull').show()
+    }
+    $('#deleteLoader').hide()
+
+    clearInterval(msId);
+    document.getElementById("resettime").innerText = ms * 4;
+    $("#deletebutton").attr("disabled",false);
+    $("#deleteClose").attr("disabled",false);
+    document.getElementById("numTweets").innerText = res.count;
 }
 
 
