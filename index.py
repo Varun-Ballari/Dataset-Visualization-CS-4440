@@ -11,10 +11,10 @@ import numpy as np
 
 from keys import keys
 
-CONSUMER_KEY = keys['consumer_key'] #os.environ.get('consumer_key')
-CONSUMER_SECRET = keys['consumer_secret'] #os.environ.get('consumer_secret')
-ACCESS_TOKEN = keys['access_token'] #os.environ.get('access_token')
-ACCESS_TOKEN_SECRET = keys['access_token_secret'] #os.environ.get('access_token_secret')
+CONSUMER_KEY = os.environ.get('consumer_key') or keys['consumer_key']
+CONSUMER_SECRET = os.environ.get('consumer_secret') or keys['consumer_secret']
+ACCESS_TOKEN = os.environ.get('access_token') or keys['access_token']
+ACCESS_TOKEN_SECRET = os.environ.get('access_token_secret') or keys['access_token_secret']
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -22,7 +22,14 @@ api = tweepy.API(auth)
 
 
 app = Flask(__name__)
-client = pymongo.MongoClient("localhost", 27017)
+
+USERNAME = os.environ.get('username') or keys['username']
+PASSWORD = os.environ.get('password') or keys['password']
+
+client = pymongo.MongoClient("mongodb://" + USERNAME + ":" + PASSWORD+ "@cluster0-shard-00-00-99szw.mongodb.net:27017,cluster0-shard-00-01-99szw.mongodb.net:27017,cluster0-shard-00-02-99szw.mongodb.net:27017/admin?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
+# client = pymongo.MongoClient("localhost", 27017)
+
+
 db = client.CS4440
 coordinates = db.coordinates
 countries = db.countries
