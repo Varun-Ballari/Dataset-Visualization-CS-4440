@@ -40,6 +40,40 @@ countries = db.countries
 countTweets = db.countTweets
 
 
+ENGLISH_STOP_WORDS = [
+    "a", "about", "above", "across", "after", "afterwards", "again", "against",
+    "all", "almost", "along", "already", "also", "although", "always","am",
+    "among", "amongst", "amoungst", "an", "and", "another","any", "anyhow",
+    "are", "around", "as", "at", "back", "be", "became", "because", "become",
+    "becomes", "becoming", "been", "before", "beforehand", "being","below",
+    "beside", "besides", "between", "beyond", "bill", "both", "but", "by",
+    "can", "cannot", "cant", "co", "could", "couldnt","do", "done","due",
+    "during", "each", "eg", "either", "else", "elsewhere", "etc", "even",
+    "ever", "everything", "everywhere", "except", "few", "for", "from",
+    "further", "get", "give", "go", "had", "has", "hasnt", "have", "he",
+    "hence", "her", "here", "hereafter", "hereby", "herein", "hereupon", "hers",
+    "herself", "him", "himself", "his", "how", "however", "i", "ie", "if", "in",
+    "indeed", "into", "is", "it", "its", "itself", "keep", "least", "less",
+    "made", "many", "may", "me", "meanwhile", "might", "mine", "more",
+    "moreover", "most", "mostly", "much", "must", "my", "myself", "name",
+    "namely", "neither", "never", "nevertheless", "next", "nine", "no",
+    "nobody", "none", "noone", "nor", "not", "nothing", "now", "nowhere", "of",
+    "off", "often", "on", "once", "one", "only", "onto", "or", "other",
+    "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own",
+    "part", "per", "perhaps", "please", "put", "rather", "re", "same", "see",
+    "seem", "seemed", "seeming", "seems", "several", "she", "should", "show",
+    "since", "so", "some", "somehow", "someone", "something", "sometime",
+    "sometimes", "somewhere", "still", "such", "take", "than", "that", "the",
+    "their", "them", "themselves", "then", "thence", "there", "thereafter",
+    "thereby", "therefore", "therein", "thereupon", "these", "they", "this",
+    "those", "though", "through", "thru", "thus", "to", "too", "toward",
+    "towards", "un", "under", "until", "up", "upon", "us", "very", "via", "was",
+    "we", "well", "were", "what", "whatever", "when", "whence", "whenever",
+    "where", "whereafter", "whereas", "whereby", "wherein","wherever",
+    "whether", "which", "while", "who", "whoever", "whole", "whom", "whose",
+    "why", "will", "with", "within", "without", "would", "yet", "you", "your",
+    "yours", "yourself", "yourselves", "https", "rt"]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -108,7 +142,15 @@ def findFunction():
     # print(sentenceList)
 
     if (len(sentenceList) > 0):
-        cv = CountVectorizer()
+
+        if commonWords == 'false':
+            print("false")
+            cv = CountVectorizer()
+
+        else:
+            print("true")
+            cv = CountVectorizer(stop_words = ENGLISH_STOP_WORDS)
+
         x = cv.fit_transform(sentenceList).toarray()
         y = cv.get_feature_names()
         dist = np.sum(x, axis = 0)
