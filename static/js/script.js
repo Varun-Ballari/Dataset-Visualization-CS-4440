@@ -329,6 +329,7 @@ function countries() {
 
         var options = {
             colorAxis: {colors: ['#ffffff','#157BFB']},
+            width: $(window).width() / 2
         };
 
         var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
